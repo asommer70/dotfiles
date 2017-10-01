@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/data/data/com.termux/files/home/storage/downloads'
+let g:netrw_dirhist_2='/data/data/com.termux/files/home/storage/downloads/work'
+let g:netrw_dirhist_3='/storage/emulated/0/Download/work/vim-colors-solarized'
+let g:netrw_dirhist_4='/storage/emulated/0/Download/work'
+let g:netrw_dirhist_5='/storage/emulated/0/Download/work/go'
+let g:netrw_dirhist_6='/storage/emulated/0/Download/work/go/src'
+let g:netrw_dirhist_7='/storage/emulated/0/Download/work/go/src/strangway'
