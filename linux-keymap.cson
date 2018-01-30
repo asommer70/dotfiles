@@ -1,0 +1,9 @@
+'atom-text-editor':
+    'ctrl-alt-l': 'editor-select-line'
+    'ctrl-l': 'pane:show-next-item'
+    'ctrl-shift-b': 'bookmarks:view-all'
+    'ctrl-b': 'bookmarks:toggle-bookmark'
+
+'body':
+  'ctrl-h': 'pane:show-previous-item'
+  'ctrl-l': 'pane:show-next-item'
