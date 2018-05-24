@@ -4,23 +4,13 @@
 (ido-mode 1)
 (defalias 'list-buffers 'ibuffer)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" default)))
- '(package-selected-packages
-   (quote
-    (jedi flycheck solarized-theme color-theme counsel swiper ace-window buffer-flip tabbar which-key try use-package ac-html ac-html-bootstrap ac-php yasnippet evil))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 2.0)))))
+
+(require 'package)
+(setq package-enable-at-startup nil)
+(add-to-list 'package-archives
+	     '("melpa" . "https://melpa.org/packages/"))
+
+(package-initialize)
 
 (global-unset-key "\M-l")
 (global-unset-key "\M-h")
@@ -32,6 +22,9 @@
 ;;(global-set-key (kbd "M-l") 'next-buffer)
 ;;(global-set-key (kbd "M-h") 'previous-buffer)
 
+;;
+;; Bootstrap `use-package'
+;;
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
@@ -183,5 +176,17 @@ version 2016-06-18"
   :init
     (yas-global-mode 1))
 
-
-
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (yasnippet-snippets which-key web-mode-edit-element use-package try tabbar solarized-theme jedi flycheck evil counsel color-theme buffer-flip auto-yasnippet ace-window ac-php ac-html-bootstrap ac-html))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 2.0)))))
