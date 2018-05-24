@@ -14,7 +14,7 @@
     ("d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" default)))
  '(package-selected-packages
    (quote
-    (solarized-theme color-theme counsel swiper ace-window buffer-flip tabbar which-key try use-package ac-html ac-html-bootstrap ac-php yasnippet evil))))
+    (jedi flycheck solarized-theme color-theme counsel swiper ace-window buffer-flip tabbar which-key try use-package ac-html ac-html-bootstrap ac-php yasnippet evil))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -103,6 +103,9 @@
   :ensure t
   :config (load-theme 'solarized-light t))
 
+;;
+;; Setup buffers the way I like.
+;;
 (defun xah-next-user-buffer ()
   "Switch to the next user buffer.
 “user buffer” is determined by `xah-user-buffer-q'.
@@ -134,7 +137,8 @@ Version 2016-06-19"
 (defun xah-user-buffer-q ()
   "Return t if current buffer is a user buffer, else nil.
 Typically, if buffer name starts with *, it's not considered a user buffer.
-This function is used by buffer switching command and close buffer command, so that next buffer shown is a user buffer.
+This function is used by buffer switching command and close buffer command,
+so that next buffer shown is a user buffer.
 You can override this function to get your idea of “user buffer”.
 version 2016-06-18"
   (interactive)
@@ -147,3 +151,37 @@ version 2016-06-18"
 
 (global-set-key (kbd "M-l") 'xah-next-user-buffer)
 (global-set-key (kbd "M-h") 'xah-previous-user-buffer)
+
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode t))
+
+;;
+;; Advanced Python auto-complete... ran kind of slow.
+;;
+;;(use-package jedi
+;;  :ensure t
+;;  :init
+;;  (add-hook 'python-mode-hook 'jedi:setup)
+;;  (add-hook 'python-mode-hook 'jedi:ac-setup))
+
+(defun save-all ()
+  "Auto-save..."
+  (interactive)
+  (save-some-buffers t))
+(add-hook 'focus-out-hook 'save-all)
+
+;; Turn on line numbers.
+(global-linum-mode t)
+
+;;
+;; yasnippets
+;;
+(use-package yasnippet
+  :ensure t
+  :init
+    (yas-global-mode 1))
+
+
+
