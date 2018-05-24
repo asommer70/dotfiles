@@ -184,7 +184,7 @@ version 2016-06-18"
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
    (quote
-    (emmet-mode virtualenvwrapper elpy expand-region multiple-cursors beacon highlight-indentation undo_tree yasnippet-snippets which-key web-mode-edit-element use-package try tabbar solarized-theme jedi flycheck evil counsel color-theme buffer-flip auto-yasnippet ace-window ac-php ac-html-bootstrap ac-html))))
+    (vue-mode emmet-mode virtualenvwrapper elpy expand-region multiple-cursors beacon highlight-indentation undo_tree yasnippet-snippets which-key web-mode-edit-element use-package try tabbar solarized-theme jedi flycheck evil counsel color-theme buffer-flip auto-yasnippet ace-window ac-php ac-html-bootstrap ac-html))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -283,3 +283,9 @@ version 2016-06-18"
   (add-hook 'web-mode-hook 'emmet-mode)
   (add-hook 'css-mode-hook  'emmet-mode))
 (global-set-key (kbd "C-j") 'emmet-expand-line)
+
+;;
+;; vue-mode
+;;
+(use-package vue-mode
+  :ensure t)  
