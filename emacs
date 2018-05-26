@@ -1,5 +1,6 @@
 (setq inhibit-start-message t)
 (fset 'yes-or-no-p 'y-or-n-p)
+(show-paren-mode 1)
 (setq ido-enable-flex-matching t)
 (setq ido-everwhere t)
 (ido-mode 1)
@@ -260,6 +261,8 @@ version 2016-06-18"
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2))
+
+(web-mode-toggle-current-element-highlight)
 (add-hook 'web-mode-hook  'my-web-mode-hook)
 
 ;;
