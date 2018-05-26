@@ -1,12 +1,15 @@
 (setq inhibit-start-message t)
 (fset 'yes-or-no-p 'y-or-n-p)
 (show-paren-mode 1)
+(setq inferior-lisp-program "/usr/local/bin/clisp")
 (setq ido-enable-flex-matching t)
 (setq ido-everwhere t)
 (ido-mode 1)
 (defalias 'list-buffers 'ibuffer)
 
-
+;;
+;;  Setup melpa.
+;;
 (require 'package)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives
@@ -14,18 +17,29 @@
 
 (package-initialize)
 
+;;
+;; Clear M-l and M-h to be re-assigned later.
+;;
 (global-unset-key "\M-l")
 (global-unset-key "\M-h")
 
-;;(global-set-key (kbd "M-o")  'mode-line-other-buffer)
-;;(defun switch-to-previous-buffer ()
-;;      (interactive)
-;;      (switch-to-buffer (other-buffer (current-buffer) 1)))
-;;(global-set-key (kbd "M-l") 'next-buffer)
-;;(global-set-key (kbd "M-h") 'previous-buffer)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(package-selected-packages
+   (quote
+    (tern-auto-complete tern js2-refactor ac-js2 vue-mode emmet-mode virtualenvwrapper elpy expand-region multiple-cursors beacon highlight-indentation undo_tree yasnippet-snippets which-key web-mode-edit-element use-package try tabbar solarized-theme jedi flycheck evil counsel color-theme buffer-flip auto-yasnippet ace-window ac-php ac-html-bootstrap ac-html))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 2.0)))))
 
 ;;
-;; Bootstrap `use-package'
+;; Bootstrap `use-package' and setup tabbar, try, etc.
 ;;
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
@@ -38,10 +52,24 @@
   :ensure t
   :config (which-key-mode))
 
+;;
+;; Tabbar
+;;
 (use-package tabbar
   :ensure t
   :config
   (tabbar-mode 1))
+
+ (defun my-tabbar-buffer-groups () ;; customize to show all normal files in one group
+   "Returns the name of the tab group names the current buffer belongs to.
+ There are two groups: Emacs buffers (those whose name starts with '*', plus
+ dired buffers), and the rest.  This works at least with Emacs v24.2 using
+ tabbar.el v1.7."
+   (list (cond ((string-equal "*" (substring (buffer-name) 0 1)) "emacs")
+               ((eq major-mode 'dired-mode) "emacs")
+               (t "user"))))
+(setq tabbar-buffer-groups-function 'my-tabbar-buffer-groups)
+
 
 (use-package ace-window
   :ensure t
@@ -56,6 +84,10 @@
 (use-package counsel
   :ensure t
   )
+
+;;
+;; Swiper is a more advanced search package.
+;;
 (use-package swiper
   :ensure t
   :config
@@ -81,9 +113,12 @@
     (define-key minibuffer-local-map (kbd "C-r") 'counsel-minibuffer-history)
     ))
 
+;;
+;; avy package to quickly jump to 1/2 character search.
+;;
 (use-package avy
   :ensure t
-  :bind ("M-s" . avy-goto-char))
+  :bind ("C-:" . avy-goto-char))
 (global-set-key (kbd "C-'") 'avy-goto-char-2)
 
 (use-package auto-complete
@@ -94,9 +129,16 @@
     (global-auto-complete-mode t)
     ))
 
+;;
+;; Set the theme.
+;;
 (use-package solarized-theme
   :ensure t
-  :config (load-theme 'solarized-dark t))
+  :config (load-theme 'solarized-light t))
+;; (use-package solarized-theme
+;;   :ensure t)
+(when (string= (system-name) "prime")
+  (load-theme 'solarized-dark t))
 
 ;;
 ;; Setup buffers the way I like.
@@ -165,15 +207,25 @@ version 2016-06-18"
 ;;  (add-hook 'python-mode-hook 'jedi:setup)
 ;;  (add-hook 'python-mode-hook 'jedi:ac-setup))
 
+
+;;
+;; Save all buffers when on focus-out.
+;;
 (defun save-all ()
   "Auto-save..."
   (interactive)
   (save-some-buffers t))
 (add-hook 'focus-out-hook 'save-all)
 
-;; Turn on line numbers.
-(global-linum-mode t)
+;;
+;; Use pc-selection-mode for copy, paste, select, etc.
+;;
+(delete-selection-mode)
+(cua-mode t)
 
+
+;; Turn on liners.
+(global-linum-mode t)
 ;;
 ;; yasnippets
 ;;
@@ -181,24 +233,6 @@ version 2016-06-18"
   :ensure t
   :init
     (yas-global-mode 1))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
- '(package-selected-packages
-   (quote
-    (web-mode undo-tree vue-mode emmet-mode virtualenvwrapper elpy expand-region multiple-cursors beacon highlight-indentation undo_tree yasnippet-snippets which-key web-mode-edit-element use-package try tabbar solarized-theme jedi flycheck evil counsel color-theme buffer-flip auto-yasnippet ace-window ac-php ac-html-bootstrap ac-html))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(aw-leading-char-face ((t (:inherit ace-jump-face-foreground :height 2.0)))))
 
 
 ;;
@@ -233,12 +267,15 @@ version 2016-06-18"
 
 (setq save-interprogram-paste-before-kill t)
 
-;;(use-package highlight-indentation
-;;  :ensure t
-;;  :config
-;;  (highlight-indentation-mode t))
-;;(set-face-background 'highlight-indentation-face "#e3e3d3")
-;;(set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
+;;
+;; Highlights vertical tabs, but not sure it's very useful for me.
+;;
+;; (use-package highlight-indentation
+;;   :ensure t
+;;   :config
+;;   (highlight-indentation-mode t))
+;; (set-face-background 'highlight-indentation-face "#e3e3d3")
+;; (set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
 
 ;;
 ;; web-mode
@@ -256,14 +293,15 @@ version 2016-06-18"
   
 ;; adjust indents for web-mode to 2 spaces
 (defun my-web-mode-hook ()
-  "Hooks for Web mode. Adjust indents"
+  "Hooks for Web mode.  Adjust indent."
   ;;; http://web-mode.org/
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
   (setq web-mode-code-indent-offset 2))
-
+(setq web-mode-toggle-current-element-highlight t)
 (web-mode-toggle-current-element-highlight)
 (add-hook 'web-mode-hook  'my-web-mode-hook)
+(add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
 
 ;;
 ;; Python3 virtualenv.
@@ -272,7 +310,7 @@ version 2016-06-18"
 (setq python-shell-interpreter "python3")
 (use-package elpy
   :ensure t
-  :config 
+  :config
   (elpy-enable))
 
 
@@ -297,7 +335,57 @@ version 2016-06-18"
 ;;
 ;; vue-mode
 ;;
-(use-package vue-mode
-  :ensure t)  
+;; (use-package vue-mode
+;;   :ensure t)
 
-(setq inferior-lisp-program "clisp")
+;;
+;; JavaScript
+;;
+(use-package js2-mode
+  :ensure t
+  :ensure ac-js2
+  :init
+  (progn
+    (add-hook 'js-mode-hook 'js2-minor-mode)
+    (add-hook 'js2-mode-hook 'ac-js2-mode)))
+
+(use-package js2-refactor
+  :ensure t
+  :config
+  (progn
+    (js2r-add-keybindings-with-prefix "C-c C-m")
+    ;; eg. extract function with `C-c C-m ef`.
+    (add-hook 'js2-mode-hook #'js2-refactor-mode)))
+(use-package tern
+  :ensure tern
+  :ensure tern-auto-complete
+  :config
+  (progn
+    (add-hook 'js-mode-hook (lambda () (tern-mode t)))
+    (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
+    (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))))
+
+;; use web-mode for .jsx files
+(add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
+
+;; turn on flychecking globally
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; disable jshint since we prefer eslint checking
+(setq-default flycheck-disabled-checkers
+  (append flycheck-disabled-checkers
+    '(javascript-jshint)))
+
+;; use eslint with web-mode for jsx files
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+
+;; customize flycheck temp file prefix
+(setq-default flycheck-temp-prefix ".flycheck")
+
+;; disable json-jsonlist checking for json files
+(setq-default flycheck-disabled-checkers
+  (append flycheck-disabled-checkers
+    '(json-jsonlist)))
+
+(provide '.emacs)
+;;; .emacs ends here
