@@ -95,7 +95,7 @@
 
 (use-package solarized-theme
   :ensure t
-  :config (load-theme 'solarized-light t))
+  :config (load-theme 'solarized-dark t))
 
 ;;
 ;; Setup buffers the way I like.
@@ -136,12 +136,16 @@ so that next buffer shown is a user buffer.
 You can override this function to get your idea of “user buffer”.
 version 2016-06-18"
   (interactive)
+;; Write a message to the *Messages* buffer.
+;;  (message "buffer-name: `%s'..." (buffer-name))
+  (if (string-equal "*inferior-lisp*" (buffer-name))
+      t
   (if (string-equal "*" (substring (buffer-name) 0 1))
       nil
     (if (string-equal major-mode "dired-mode")
         nil
       t
-      )))
+      ))))
 
 (global-set-key (kbd "M-l") 'xah-next-user-buffer)
 (global-set-key (kbd "M-h") 'xah-previous-user-buffer)
@@ -182,9 +186,12 @@ version 2016-06-18"
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(package-selected-packages
    (quote
-    (vue-mode emmet-mode virtualenvwrapper elpy expand-region multiple-cursors beacon highlight-indentation undo_tree yasnippet-snippets which-key web-mode-edit-element use-package try tabbar solarized-theme jedi flycheck evil counsel color-theme buffer-flip auto-yasnippet ace-window ac-php ac-html-bootstrap ac-html))))
+    (web-mode undo-tree vue-mode emmet-mode virtualenvwrapper elpy expand-region multiple-cursors beacon highlight-indentation undo_tree yasnippet-snippets which-key web-mode-edit-element use-package try tabbar solarized-theme jedi flycheck evil counsel color-theme buffer-flip auto-yasnippet ace-window ac-php ac-html-bootstrap ac-html))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -225,12 +232,12 @@ version 2016-06-18"
 
 (setq save-interprogram-paste-before-kill t)
 
-(use-package highlight-indentation
-  :ensure t
-  :config
-  (highlight-indentation-mode t))
-(set-face-background 'highlight-indentation-face "#e3e3d3")
-(set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
+;;(use-package highlight-indentation
+;;  :ensure t
+;;  :config
+;;  (highlight-indentation-mode t))
+;;(set-face-background 'highlight-indentation-face "#e3e3d3")
+;;(set-face-background 'highlight-indentation-current-column-face "#c3b3b3")
 
 ;;
 ;; web-mode
@@ -289,3 +296,5 @@ version 2016-06-18"
 ;;
 (use-package vue-mode
   :ensure t)  
+
+(setq inferior-lisp-program "clisp")
