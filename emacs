@@ -7,6 +7,10 @@
 (ido-mode 1)
 (defalias 'list-buffers 'ibuffer)
 
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+
 ;;
 ;;  Setup melpa.
 ;;
@@ -301,8 +305,8 @@ version 2016-06-18"
   ;;; http://web-mode.org/
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2))
-(setq web-mode-toggle-current-element-highlight t)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-toggle-current-element-highlight t))
 (web-mode-toggle-current-element-highlight)
 (add-hook 'web-mode-hook  'my-web-mode-hook)
 (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
@@ -411,6 +415,26 @@ version 2016-06-18"
   :config
   (projectile-global-mode)
   (setq projectile-completion-system 'ivy))
+
+;;
+;; Indent selection more/less.
+;;
+(defun my-indent-region (N)
+  (interactive "p")
+  (if (use-region-p)
+      (progn (indent-rigidly (region-beginning) (region-end) (* N 2))
+             (setq deactivate-mark nil))
+    (self-insert-command N)))
+
+(defun my-unindent-region (N)
+  (interactive "p")
+  (if (use-region-p)
+      (progn (indent-rigidly (region-beginning) (region-end) (* N -2))
+             (setq deactivate-mark nil))
+    (self-insert-command N)))
+
+(global-set-key (kbd "C->") 'my-indent-region)
+(global-set-key (kbd "C-<") 'my-unindent-region)
 
 
 (provide '.emacs)
