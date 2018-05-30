@@ -364,6 +364,7 @@ version 2016-06-18"
     (js2r-add-keybindings-with-prefix "C-c C-m")
     ;; eg. extract function with `C-c C-m ef`.
     (add-hook 'js2-mode-hook #'js2-refactor-mode)))
+
 (use-package tern
   :ensure tern
   :ensure tern-auto-complete
@@ -372,6 +373,8 @@ version 2016-06-18"
     (add-hook 'js-mode-hook (lambda () (tern-mode t)))
     (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
     (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))))
+
+(setq js-indent-level 2)
 
 ;; use web-mode for .jsx files
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
