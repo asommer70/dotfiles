@@ -7,6 +7,10 @@
 (ido-mode 1)
 (defalias 'list-buffers 'ibuffer)
 
+(recentf-mode 1)
+(setq recentf-max-menu-items 25)
+(global-set-key "\C-x\ \C-r" 'recentf-open-files)
+
 ;;
 ;;  Setup melpa.
 ;;
@@ -28,9 +32,13 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(package-selected-packages
    (quote
-    (tern-auto-complete tern js2-refactor ac-js2 vue-mode emmet-mode virtualenvwrapper elpy expand-region multiple-cursors beacon highlight-indentation undo_tree yasnippet-snippets which-key web-mode-edit-element use-package try tabbar solarized-theme jedi flycheck evil counsel color-theme buffer-flip auto-yasnippet ace-window ac-php ac-html-bootstrap ac-html))))
+    (go-mode projectile tern-auto-complete tern js2-refactor ac-js2 vue-mode emmet-mode virtualenvwrapper elpy expand-region multiple-cursors beacon highlight-indentation undo_tree yasnippet-snippets which-key web-mode-edit-element use-package try tabbar solarized-theme jedi flycheck evil counsel color-theme buffer-flip auto-yasnippet ace-window ac-php ac-html-bootstrap ac-html)))
+ '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -52,10 +60,24 @@
   :ensure t
   :config (which-key-mode))
 
+;;
+;; Tabbar
+;;
 (use-package tabbar
   :ensure t
   :config
   (tabbar-mode 1))
+
+ (defun my-tabbar-buffer-groups () ;; customize to show all normal files in one group
+   "Returns the name of the tab group names the current buffer belongs to.
+ There are two groups: Emacs buffers (those whose name starts with '*', plus
+ dired buffers), and the rest.  This works at least with Emacs v24.2 using
+ tabbar.el v1.7."
+   (list (cond ((string-equal "*" (substring (buffer-name) 0 1)) "emacs")
+               ((eq major-mode 'dired-mode) "emacs")
+               (t "user"))))
+(setq tabbar-buffer-groups-function 'my-tabbar-buffer-groups)
+
 
 (use-package ace-window
   :ensure t
@@ -283,8 +305,8 @@ version 2016-06-18"
   ;;; http://web-mode.org/
   (setq web-mode-markup-indent-offset 2)
   (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2))
-(setq web-mode-toggle-current-element-highlight t)
+  (setq web-mode-code-indent-offset 2)
+  (setq web-mode-toggle-current-element-highlight t))
 (web-mode-toggle-current-element-highlight)
 (add-hook 'web-mode-hook  'my-web-mode-hook)
 (add-to-list 'auto-mode-alist '("\\.vue?\\'" . web-mode))
@@ -342,6 +364,7 @@ version 2016-06-18"
     (js2r-add-keybindings-with-prefix "C-c C-m")
     ;; eg. extract function with `C-c C-m ef`.
     (add-hook 'js2-mode-hook #'js2-refactor-mode)))
+
 (use-package tern
   :ensure tern
   :ensure tern-auto-complete
@@ -350,6 +373,8 @@ version 2016-06-18"
     (add-hook 'js-mode-hook (lambda () (tern-mode t)))
     (add-hook 'js2-mode-hook (lambda () (tern-mode t)))
     (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))))
+
+(setq js-indent-level 2)
 
 ;; use web-mode for .jsx files
 (add-to-list 'auto-mode-alist '("\\.jsx$" . web-mode))
@@ -372,6 +397,55 @@ version 2016-06-18"
 (setq-default flycheck-disabled-checkers
   (append flycheck-disabled-checkers
     '(json-jsonlist)))
+
+;;
+;; projectile and ivy
+;;
+
+(use-package ivy
+  :ensure t
+  :diminish (ivy-mode)
+  :bind (("C-x b" . ivy-switch-buffer))
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-count-format "%d/%d ")
+  (setq ivy-display-style 'fancy))
+
+
+(use-package projectile
+  :ensure t
+  :config
+  (projectile-global-mode)
+  (setq projectile-completion-system 'ivy))
+
+;;
+;; Indent selection more/less.
+;;
+(defun my-indent-region (N)
+  (interactive "p")
+  (if (use-region-p)
+      (progn (indent-rigidly (region-beginning) (region-end) (* N 2))
+             (setq deactivate-mark nil))
+    (self-insert-command N)))
+
+(defun my-unindent-region (N)
+  (interactive "p")
+  (if (use-region-p)
+      (progn (indent-rigidly (region-beginning) (region-end) (* N -2))
+             (setq deactivate-mark nil))
+    (self-insert-command N)))
+
+(global-set-key (kbd "C->") 'my-indent-region)
+(global-set-key (kbd "C-<") 'my-unindent-region)
+
+
+;;
+;; Go 
+;;
+(use-package go-mode
+  :ensure t
+  :mode "\\.go$")
 
 (provide '.emacs)
 ;;; .emacs ends here
