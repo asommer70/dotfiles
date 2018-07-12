@@ -37,7 +37,7 @@
     ("8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" default)))
  '(package-selected-packages
    (quote
-    (go-mode projectile tern-auto-complete tern js2-refactor ac-js2 vue-mode emmet-mode virtualenvwrapper elpy expand-region multiple-cursors beacon highlight-indentation undo_tree yasnippet-snippets which-key web-mode-edit-element use-package try tabbar solarized-theme jedi flycheck evil counsel color-theme buffer-flip auto-yasnippet ace-window ac-php ac-html-bootstrap ac-html)))
+    (js2-mode web-mode undo-tree yasnippet auto-complete projectile tern-auto-complete tern js2-refactor ac-js2 vue-mode emmet-mode virtualenvwrapper elpy expand-region multiple-cursors beacon highlight-indentation undo_tree yasnippet-snippets which-key web-mode-edit-element use-package try tabbar solarized-theme jedi flycheck evil counsel color-theme buffer-flip auto-yasnippet ace-window ac-php ac-html-bootstrap ac-html)))
  '(show-paren-mode t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
@@ -142,11 +142,11 @@
 ;;
 (use-package solarized-theme
   :ensure t
-  :config (load-theme 'solarized-light t))
+  :config (load-theme 'solarized-dark t))
 ;; (use-package solarized-theme
 ;;   :ensure t)
-(when (string= (system-name) "prime")
-  (load-theme 'solarized-dark t))
+;; (when (string= (system-name) "prime")
+;;   (load-theme 'solarized-dark t))
 
 ;;
 ;; Setup buffers the way I like.
@@ -439,13 +439,6 @@ version 2016-06-18"
 (global-set-key (kbd "C->") 'my-indent-region)
 (global-set-key (kbd "C-<") 'my-unindent-region)
 
-
-;;
-;; Go 
-;;
-(use-package go-mode
-  :ensure t
-  :mode "\\.go$")
 
 (provide '.emacs)
 ;;; .emacs ends here
