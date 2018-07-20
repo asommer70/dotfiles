@@ -517,14 +517,14 @@
   </keybind>
 
   <!-- prev tab -->
-  <keybind key="A-h">
+  <keybind key="C-A-h">
     <action name="Execute">
       <command>xvkbd -no-jump-pointer -xsendevent -text '\C\[ISO_Left_Tab]'</command>
     </action>
   </keybind>
   
   <!-- next tab -->
-  <keybind key="A-l">
+  <keybind key="C-A-l">
     <action name="Execute">
       <command>xvkbd -no-jump-pointer -xsendevent -text '\C\S\[Tab]'</command>
     </action>

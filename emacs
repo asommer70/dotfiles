@@ -200,7 +200,7 @@ version 2016-06-18"
       t
       ))))
 
-;; (global-set-key (kbd "M-l") 'xah-next-user-buffer) 
+;; (global-set-key (kbd "M-l") 'xah-next-user-buffer)
 ;; (global-set-key (kbd "M-h") 'xah-previous-user-buffer)
 (global-set-key (kbd "C-S-l") 'xah-next-user-buffer)
 (global-set-key (kbd "C-S-h") 'xah-previous-user-buffer)
