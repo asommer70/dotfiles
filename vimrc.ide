@@ -1,0 +1,99 @@
+"
+" Use :Tex to open file tree browser and select file for new tab.
+"
+
+call plug#begin('~/.vim/plugged')
+Plug 'itchyny/lightline.vim'
+
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
+Plug '/home/asommer/.fzf'
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+
+Plug 'alvan/vim-closetag/plugin'
+
+Plug 'scrooloose/nerdcommenter'
+
+Plug 'mattn/emmet-vim'
+
+Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+call plug#end()
+
+" Golang linting.
+set rtp+=$GOPATH/src/golang.org/x/lint/misc/vim
+
+" What file types to auto close HTML tags.
+let g:closetag_filetypes = 'html,xhtml,phtml,php'
+
+" JavaScript configs.
+let g:javascript_plugin_jsdoc = 1
+
+" Change tabs using Shift+h and Shift+l.
+map <S-h> gT
+map <S-l> gt
+
+" Remap the leader key.
+" :let mapleader = "."
+
+" Set tab stops.
+autocmd FileType html setlocal ts=2 sts=2 sw=2
+autocmd FileType python setlocal ts=4 sts=4 sw=4
+autocmd FileType javascript setlocal ts=2 sts=2 sw=2
+
+let g:user_emmet_settings = {
+\  'php' : {
+\    'extends' : 'html',
+\    'filters' : 'c',
+\  },
+\  'xml' : {
+\    'extends' : 'html',
+\  },
+\  'haml' : {
+\    'extends' : 'html',
+\  },
+\}
+
+" Map FZF to Ctrl+p.
+nnoremap <C-p> :FZF<CR>
+
+" Set colors to solarized.
+execute pathogen#infect()
+set background=dark
+" colorscheme solarized
+
+" Enable syntax processing.
+syntax enable
+
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+set tabstop=2      " Number of visual spaces per tab.
+set softtabstop=2  " Number of spaces in tab when editing.
+set expandtab	   " Tabs are spaces.
+
+set nu             " Show line numbers.
+" set relativenumber " Show relative line numbers.
+set showcmd        " Show command in bottom bar.
+" set cursorline     " Highlight current line.
+
+filetype plugin on
+filetype indent on " Load filetype-specific indent files.
+
+set wildmenu       " Visual autocomplete for command menu.
+set lazyredraw     " Redraw the screen only when we need to.
+set showmatch      " Highlight matching [{()}]]
+
+set incsearch      " Search as characters are entered.
+set hlsearch       " Highlight search matches.
+
+
+" Allows cursor change in tmux mode.
+" if exists('$TMUX')
+"        let &t_SI = "\<Esc>Ptmux;\<ESC>\<ESC>]50;CursorShape=1\x7\<ESC>\\"
+"        let &t_EI = "\<Esc>Ptmux;\<ESC>\<ESC>]50;CursorShape=0\x7\<ESC>\\"
+" else
+"        let &t_SI = "\<Esc>]50;CursorShape=1\x7"
+"        let &t_EI = "\<Esc>]50;CursorShape=0\x7"
+" endif
